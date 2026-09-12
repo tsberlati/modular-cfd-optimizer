@@ -3,7 +3,7 @@
 ![Python](https://img.shields.io/badge/Python-3.8%2B-blue)
 ![OpenFOAM](https://img.shields.io/badge/OpenFOAM-Tested-orange)
 
-> **Note:** Developed as part of a Bachelor's Thesis in Aerospace Engineering and a research internship at the CICLoPE Laboratory (Alma Mater Studiorum - University of Bologna).
+> **Note:** Developed as part of a curricular Bachelor's Thesis and internship in Aerospace Engineering at the University of Bologna (CICLoPE Laboratory). Validated on the F.R.E.D. demonstrator with the university's student rocketry team, Aurora Rocketry.
 
 ## Overview
 This repository contains a framework for parameter-driven aerodynamic shape optimization and CFD analysis. It interfaces CAD engines (SALOME, Blender) and analytical surface scripts with OpenFOAM solvers to perform Surrogate-Based Optimization (SBO) workflows.
