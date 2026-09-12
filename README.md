@@ -1,4 +1,4 @@
-# black-box-modular-cfd-optimizer
+# Modular CFD Optimizer
 
 ![Python](https://img.shields.io/badge/Python-3.8%2B-blue)
 ![OpenFOAM](https://img.shields.io/badge/OpenFOAM-Tested-orange)
