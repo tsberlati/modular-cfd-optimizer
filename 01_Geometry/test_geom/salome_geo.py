@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 ###
-### SCRIPT SALOME LIMITATO A MODULO SHAPER PER EXPORT STL
+### SALOME SCRIPT LIMITED TO SHAPER MODULE FOR STL EXPORT
 ###
 
 import sys
@@ -21,7 +21,7 @@ partSet = model.moduleDocument()
 Part_1 = model.addPart(partSet)
 Part_1_doc = Part_1.document()
 
-# Parametri intercettati e modificati dinamicamente dall'orchestratore
+# Parameters intercepted and modified dynamically by the orchestrator
 model.addParameter(Part_1_doc, "angle_div", '10')
 model.addParameter(Part_1_doc, "angle_conv", '30')
 

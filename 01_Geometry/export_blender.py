@@ -12,7 +12,7 @@ def run_export():
     except (ValueError, IndexError):
         sys.exit(1)
 
-    # 1. Global Object Identification (Multi-component Architecture)
+    # 1. Identify mesh objects
     # Filters only visible mesh objects
     mesh_objects = [o for o in bpy.context.view_layer.objects if o.type == 'MESH' and o.visible_get()]
     objects_with_keys = [o for o in mesh_objects if o.data.shape_keys]
@@ -65,7 +65,7 @@ def run_export():
         print(f"Error parsing shape data: {e}")
         sys.exit(1)
 
-    # 4. Selection and BMesh Sanitization (Headless-safe)
+    # 4. BMesh topology processing
     for o in bpy.context.view_layer.objects:
         o.select_set(False)
     

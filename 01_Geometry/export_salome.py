@@ -3,6 +3,9 @@ import os
 import re
 
 def run_salome_export():
+    """
+    Executes Salome Shaper script, injects parameters, and exports STL.
+    """
     try:
         shape_data_str = os.environ.get("SALOME_SHAPE_DATA")
         export_path = os.environ.get("SALOME_EXPORT_PATH")
@@ -19,7 +22,7 @@ def run_salome_export():
         with open(raw_dump_path, 'r') as f:
             script_content = f.read()
 
-        # Parallel Execution Isolation: Inject PID into temporary XAO files
+        # Handle missing XAO files
         _pid = os.getpid()
         script_content = re.sub(r'(/tmp/shaper_[a-zA-Z0-9_]+)\.xao', rf'\g<1>_{_pid}.xao', script_content)
 

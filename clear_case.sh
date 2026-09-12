@@ -5,6 +5,7 @@ BASE_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
 SIM_DIR="$BASE_DIR/02_Simulation"
 STL_DIR="$BASE_DIR/01_Geometry/stl_variants"
 CSV_FILE="$BASE_DIR/03_Data/design_points.csv"
+RESULTS_FILE="$BASE_DIR/03_Data/design_results.csv"
 
 # --- COLORS ---
 CYAN='\033[96m'
@@ -16,7 +17,7 @@ NC='\033[0m'
 
 clear
 echo -e "${BOLD}${YELLOW}============================================================${NC}"
-echo -e "${BOLD}${YELLOW}                 🧹 WORKSPACE RESET                         ${NC}"
+echo -e "${BOLD}${YELLOW}                 🧹 WORKSPACE RESET                          ${NC}"
 echo -e "${BOLD}${YELLOW}============================================================${NC}"
                                                                               
 # 1. CFD cases cleanup
@@ -34,20 +35,20 @@ if [ -d "$STL_DIR" ]; then
 fi
 
 # 3. Interactive CSV removal
-if [ -f "$CSV_FILE" ]; then
+if [ -f "$CSV_FILE" ] || [ -f "$RESULTS_FILE" ]; then
     echo -e ""
-    echo -e "${BOLD}${RED}⚠️  ATTENTION:${NC} Do you want to delete ${BOLD}design_points.csv${NC} as well?"
+    echo -e "${BOLD}${RED}⚠️  ATTENTION:${NC} Do you want to delete ${BOLD}design_points.csv${NC} and ${BOLD}design_results.csv${NC}?"
     read -p "(y/n): " confirm
     
     if [[ "$confirm" == [yY] || "$confirm" == [sS] ]]; then
-        echo -n " > Removing design_points.csv... "
-        rm -f "$CSV_FILE"
+        echo -n " > Removing database CSV files... "
+        rm -f "$CSV_FILE" "$RESULTS_FILE"
         echo -e "${RED}Deleted${NC}"
     else
-        echo -e " > ${GREEN}Keeping design_points.csv${NC} for the next run."
+        echo -e " > ${GREEN}Keeping database CSV files${NC} for the next run."
     fi
 else
-    echo -e " > design_points.csv not found, skipping."
+    echo -e " > Database CSV files not found, skipping."
 fi
 
 echo -e "${BOLD}${YELLOW}============================================================${NC}"

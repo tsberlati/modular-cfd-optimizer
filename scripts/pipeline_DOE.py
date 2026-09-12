@@ -11,7 +11,7 @@ import extract_result
 from core_geometry import GeometryEngine, Col
 
 # ==========================================
-# DESIGN OF EXPERIMENTS (DOE) MATHEMATICS
+# --- DESIGN OF EXPERIMENTS (DOE) ---
 # ==========================================
 def parse_cad_parameters(config_dict):
     bounds_dict = {}
@@ -152,8 +152,8 @@ def run_openfoam(case_dir, solver, cad_mode, parallel=False, cores=4):
 # ==========================================
 # MAIN WORKFLOW (TWO-PHASE ARCHITECTURE)
 # ==========================================
-def run_sbo_workflow(n_cases, seed, use_manual=False, parallel=False, cores=4):
-    print(f"\n{Col.BOLD}{Col.CYAN}--- STARTING SBO PIPELINE (Decoupled Architecture) ---{Col.END}")
+def run_doe_workflow(n_cases, seed, use_manual=False, parallel=False, cores=4):
+    print(f"\n{Col.BOLD}{Col.CYAN}--- STARTING DOE PIPELINE ---{Col.END}")
 
     solver_name = get_solver_from_baseline()
     print(f" > Solver detected from baseline: {Col.BOLD}{Col.YELLOW}{solver_name}{Col.END}")
@@ -179,6 +179,7 @@ def run_sbo_workflow(n_cases, seed, use_manual=False, parallel=False, cores=4):
         print(" > Parsing user-provided design matrix")
         try:
             df = pd.read_csv(config.CSV_FILE, comment='#')
+            config.verify_geometric_compatibility(df)
             missing_keys = [k for k in keys if k not in df.columns]
             if missing_keys:
                 print(f"{Col.YELLOW}[WARNING] CSV missing required CAD parameters: {missing_keys}{Col.END}")
@@ -209,7 +210,7 @@ def run_sbo_workflow(n_cases, seed, use_manual=False, parallel=False, cores=4):
     # ==========================================
     # PHASE 1: CAD GENERATION AND CASE SETUP
     # ==========================================
-    print(f"\n{Col.BOLD}--- PHASE 1: Geometry Synthesis and Domain Preparation ---{Col.END}")
+    print(f"\n{Col.BOLD}--- PHASE 1: Geometry Generation and Setup ---{Col.END}")
     valid_cases = []
     
     for i, row in df.iterrows():
@@ -258,7 +259,7 @@ def run_sbo_workflow(n_cases, seed, use_manual=False, parallel=False, cores=4):
     print(f"Successfully converged CFD cases: {success_cfd_count} out of {total_valid}")
 
     if success_cfd_count > 0:
-        print(f"\n > Initiating performance extraction protocol...")
+        print(f"\n > Starting data extraction...")
         try:
             df_results = extract_result.extract_results()
             print(f"{Col.GREEN}Consolidated database saved to: {config.DIRS['data']}/design_results.csv{Col.END}\n")

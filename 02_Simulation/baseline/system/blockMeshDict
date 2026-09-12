@@ -57,7 +57,7 @@ vertices
 
 blocks
 (
-    // --- INTERNO UGELLO (Axis -> R_wall) ---
+    // --- NOZZLE INTERIOR (Axis -> R_wall) ---
     hex (0 7 9 2  0 7 8 1) (8 32 1) simpleGrading (1.0 0.6666666666666667 1)
     hex (7 14 16 9  7 14 15 8) (116 32 1) simpleGrading (0.4 0.6666666666666667 1)
     hex (14 21 23 16  14 21 22 15) (22 32 1) simpleGrading (0.7999999999999999 0.6666666666666667 1)
@@ -65,7 +65,7 @@ blocks
     hex (28 35 37 30  28 35 36 29) (169 32 1) simpleGrading (2.5 0.6666666666666667 1)
     hex (35 42 44 37  35 42 43 36) (228 32 1) simpleGrading (30.0 0.6666666666666667 1)
 
-    // --- FARFIELD ESTERNO UGELLO (R_lip -> Y4) (Blocco Unificato dipendente da X_ext_in) ---
+    // --- EXTERNAL NOZZLE FARFIELD (R_lip -> Y4) (Unified Block depending on X_ext_in) ---
     hex (25 39 41 27  24 38 40 26) (52 137 1) simpleGrading (0.25 50.0 1)
 
     // --- WAKE (R_out -> R_lip) ---
@@ -86,7 +86,7 @@ edges
 boundary
 (
     inlet { type patch; faces (
-        (2 0 0 1) // Ugello In
+        (2 0 0 1) // Nozzle Inlet
     ); }
     outlet { type patch; faces (
         (42 44 43 42) // Plume Out
@@ -95,12 +95,12 @@ boundary
     ); }
     walls { type wall; faces (
         (9 2 1 8) (16 9 8 15)
-        (23 16 15 22) (30 23 22 29) (37 30 29 36) // Profilo Interno
-        (39 37 36 38)   // Labbro verticale (step)
-        (25 39 38 24) // Parete Esterna Orizzontale
+        (23 16 15 22) (30 23 22 29) (37 30 29 36) // Inner Profile
+        (39 37 36 38)   // Vertical lip (step)
+        (25 39 38 24) // External Horizontal Wall
     ); }
     farfield { type patch; faces (
-        (27 25 24 26) // Farfield Ambient In (Sinistra)
+        (27 25 24 26) // Farfield Ambient In (Left)
         (41 27 26 40) // Farfield Top
         (48 41 40 47)    // Farfield Plume Top
     ); }
@@ -112,13 +112,15 @@ boundary
     front { type wedge; faces (
         (0 7 8 1) (7 14 15 8)
         (14 21 22 15) (21 28 29 22) (28 35 36 29) (35 42 43 36)
-        (24 38 40 26) // Farfield Esterno Front Unificato
+        (24 38 40 26) // Unified External Front Farfield
         (36 43 45 38) (38 45 47 40)
     ); }
     back { type wedge; faces (
         (0 2 9 7) (7 9 16 14)
         (14 16 23 21) (21 23 30 28) (28 30 37 35) (35 37 44 42)
-        (25 27 41 39) // Farfield Esterno Back Unificato
+        (25 27 41 39) // Unified External Back Farfield
         (37 39 46 44) (39 41 48 46)
     ); }
 );
+
+// ************************************************************************* //

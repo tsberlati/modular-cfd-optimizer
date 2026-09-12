@@ -2,20 +2,19 @@ import math
 import os
 import numpy as np
 
-# --- NOZZLE GEOMETRIC PARAMETERS ---
-R_in = 15.5             
-R_throat = 4.0          
-R_out = 8.945           
-R_fillet = 4.0          
+#--- NOZZLE GEOMETRIC PARAMETERS
+R_in = 15.5
+R_out = 8.945
+R_throat = 4.0
 
-# Dynamic interception of parameters from the Framework (with fallback to default values)
+# Dynamic interception of active parameters from the Framework
+theta_div_deg = float(os.environ.get("angle_div", 12.0))
+R_fillet = float(os.environ.get("R_fillet", 2.5))
 theta_conv_deg = float(os.environ.get("angle_conv", 30.0))
-theta_div_deg  = float(os.environ.get("angle_div", 10.0))
 
-theta_wedge = 5       
-L_pre = 2.0          
-
-R_lip = R_out + 3.0    
+theta_wedge = 5 
+L_pre = 2.0 
+R_lip = R_out + 3.0
 
 # --- ANALYTICAL PROFILE CALCULATION ---
 theta_c = math.radians(theta_conv_deg)

@@ -3,6 +3,8 @@ import glob
 import subprocess
 import config
 
+os.makedirs(config.DIRS["output_stl"], exist_ok=True)
+
 class Col:
     CYAN = '\033[96m'
     GREEN = '\033[92m'
@@ -15,8 +17,7 @@ class Col:
 
 class GeometryEngine:
     """
-    Independent geometry engine for STL generation.
-    Dynamically supports SALOME (B-Rep) and BLENDER (Surface Mesh) interfaces.
+    Geometry interface for STL generation via SALOME or BLENDER.
     """
     def __init__(self):
         self.cad_mode = self._detect_cad_engine(config.DIRS["geometry"])
@@ -24,7 +25,7 @@ class GeometryEngine:
             raise RuntimeError("No compatible source found (.blend or salome_geo.py).")
 
     def _detect_cad_engine(self, geometry_dir):
-        """Identifies the CAD engine based on the source file extensions."""
+        """Identifies CAD engine from source files."""
         if glob.glob(os.path.join(geometry_dir, "genSTR.py")):
             return "PYTHON_BLOCKMESH"
         elif glob.glob(os.path.join(geometry_dir, "*.blend")):
@@ -34,7 +35,7 @@ class GeometryEngine:
         return None
 
     def _get_blender_info(self):
-        """Retrieves operational metadata for execution in the Blender environment."""
+        """Returns paths required for Blender execution."""
         blender_script = config.FILES["export_script_blender"]
         blend_files = glob.glob(os.path.join(config.DIRS["geometry"], "*.blend"))
         if not blend_files or not os.path.exists(blender_script):
@@ -44,7 +45,7 @@ class GeometryEngine:
         return blend_file, blender_script
 
     def get_parameters_keys(self):
-        """Queries the CAD system and returns the list of valid parametric keys."""
+        """Returns the list of CAD parametric keys."""
         if self.cad_mode in ["SALOME", "PYTHON_BLOCKMESH"]:
             return list(config.CAD_PARAMETERS.keys())
             
@@ -64,7 +65,7 @@ class GeometryEngine:
 
     def generate_single_stl(self, geom_id, parameters_dict):
         """
-        Processes a single geometry by sending spatial parameters to the CAD engine.
+        Generates STL file by sending parameters to the CAD engine.
         :param geom_id: Unique identifier (e.g., "geom_001")
         :param parameters_dict: Dictionary of physical values {parameter_name: float_value}
         :return: (Boolean success, Output path, Error log)

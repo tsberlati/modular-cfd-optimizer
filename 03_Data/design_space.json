@@ -1,12 +1,17 @@
 {
-    "angle_conv": {
-        "type": "range",
-        "min": 25.0,
-        "max": 45.0
-    },
-    "angle_div": {
-        "type": "perturbation",
-        "nominal": 15,
-        "percent": 50.0
-    }
+  "angle_conv": {
+    "type": "range",
+    "min": 20.0,
+    "max": 45.0
+  },
+  "angle_div": {
+    "type": "range",
+    "min": 7.5,
+    "max": 25.0
+  },
+  "R_fillet": {
+    "type": "range",
+    "min": 2.0,
+    "max": 6
+  }
 }
