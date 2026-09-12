@@ -51,6 +51,7 @@ Run the main bash script to start the framework. Ensure the virtual environment 
 
 ```bash
 ./run.sh
+```
 
 The CLI orchestrator provides access to distinct operational pipelines:
 
