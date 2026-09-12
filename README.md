@@ -74,4 +74,4 @@ Managed via `scripts/pipeline_MOO_NSGA2.py`.
 
 If you use this framework in your research or project, please cite it using the following DOI:
 
-Sberlati, T. (2026). tsberlati/modular-cfd-optimizer: Modular CFD Optimization Framework -v1.0.0 [Computer software]. Zenodo. https://doi.org/10.5281/zenodo.22726035
+Thomas Sberlati. (2026). Modular CFD Optimization Framework -v1.0.0 (Version v1.0.0) [Computer software]. Zenodo. https://doi.org/10.5281/zenodo.22726881
