@@ -309,19 +309,48 @@ def run_optimization_workflow(max_total_runs=50, target_var="I_sp", direction="m
                     return -var.flatten()[0]
                 
                 best_var = float('inf')
+                valid_mvs_found = False
                 np.random.seed(ego_seed + iter_id * 999)
                 bounds_list = [bounds_dict[k] for k in keys]  
-                for _ in range(10):
+                
+                # 1. MVS search via multi-start optimization (20 iterations)
+                for _ in range(20):
                     x0 = [np.random.uniform(b[0], b[1]) for b in bounds_list]
                     res_var = minimize(pure_exploration, x0, args=(sm,), bounds=bounds_list, method='L-BFGS-B')
                     
-                    if res_var.fun < best_var:
+                    # Compute normalized spatial distance for the MVS candidate
+                    cand_x_norm = (np.array(res_var.x) - bounds_array[:, 0]) / (bounds_array[:, 1] - bounds_array[:, 0])
+                    cand_dist = np.min(np.linalg.norm(X_train_norm - cand_x_norm, axis=1))
+                    
+                    # Acceptance criterion: the MVS point is geometrically distant from known nodes
+                    if cand_dist > 1e-3 and res_var.fun < best_var:
                         best_var = res_var.fun
                         next_x = res_var.x
+                        valid_mvs_found = True
+                        
+                # 2. Fallback: Maximin Distance Sampling if MVS fails
+                if not valid_mvs_found:
+                    print(f"    {Col.YELLOW}[!] MVS STALLED: Grid collapse detected. Executing Maximin Distance Sampling.{Col.END}")
+                    
+                    n_candidates = 2000
+                    max_min_dist = -1.0
+                    best_cand_x = None
+                    
+                    for _ in range(n_candidates):
+                        cand_x = [np.random.uniform(b[0], b[1]) for b in bounds_list]
+                        cand_x_norm = (np.array(cand_x) - bounds_array[:, 0]) / (bounds_array[:, 1] - bounds_array[:, 0])
+                        current_min_dist = np.min(np.linalg.norm(X_train_norm - cand_x_norm, axis=1))
+                        
+                        if current_min_dist > max_min_dist:
+                            max_min_dist = current_min_dist
+                            best_cand_x = cand_x
+                            
+                    next_x = best_cand_x
+                    print(f"    * {Col.CYAN}Maximin Point Selected (Normalized Distance: {max_min_dist:.4f}){Col.END}")
                         
                 point_values = {keys[i]: next_x[i] for i in range(len(keys))}
                 
-                print(f"    * {Col.YELLOW}New Exploratory NBP (Max Variance):{Col.END}")
+                print(f"    * {Col.YELLOW}New Exploratory NBP:{Col.END}")
                 for k_idx, k_name in enumerate(keys):
                     print(f"      - {k_name:<15} : {next_x[k_idx]:>10.4f}")
             
